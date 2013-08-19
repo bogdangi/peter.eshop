@@ -1,0 +1,8 @@
+<html metal:use-macro="here/main_template/macros/master">
+  <div metal:fill-slot="main">
+    <h1>Cart</h1>
+    <ul tal:repeat="item view/cart">
+      <li><span tal:content="item/title">Title</span> :<span tal:content="python:view.cart[item]">1</span></li>
+    </ul>
+  </div>
+</html>

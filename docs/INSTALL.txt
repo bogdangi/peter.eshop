@@ -1,0 +1,17 @@
+peter.eshop Installation
+------------------------
+
+To install peter.eshop using zc.buildout and the plone.recipe.zope2instance
+recipe to manage your project, you can do this:
+
+* Add ``peter.eshop`` to the list of eggs to install, e.g.:
+
+    [buildout]
+    ...
+    eggs =
+        ...
+        peter.eshop
+       
+* Re-run buildout, e.g. with:
+
+    $ ./bin/buildout
