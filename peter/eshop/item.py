@@ -118,3 +118,35 @@ class CartView(grok.View):
         smd = self.context.session_data_manager
         session = smd.getSessionData(create=True)
         self.cart = session.get('cart',{})
+
+class IOrderForm(model.Schema):
+    name = schema.Text(title = _(u"Name"))
+    email = schema.Text(title = _(u"E-mail"))
+
+class OrderedForm(form.SchemaForm):
+    grok.context(ISiteRoot)
+    grok.require('zope2.View')
+    grok.name('ordercart')
+    schema = IOrderForm
+    ignoreContext = True
+
+    @button.buttonAndHandler(_(u'Order'))
+    def handleOrder(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        smd = self.context.session_data_manager
+        session = smd.getSessionData(create=True)
+        cart = session.get('cart',{})
+        from Products.statusmessages.interfaces import IStatusMessage
+        message = IStatusMessage(self.request)
+        message.addStatusMessage("You have ordered %s"%", ".join(
+            [i.title for i in cart.keys()]
+            ), type="info")
+        self.request.response.redirect(self.context.absolute_url())
+
+    @button.buttonAndHandler(_(u'Cancel'))
+    def handleCancel(self, action):
+        self.request.response.redirect(self.context.absolute_url())
+
